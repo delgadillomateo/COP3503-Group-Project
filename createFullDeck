@@ -1,0 +1,146 @@
+#include <iostream>
+//#include "header.h"
+
+using namespace std;
+
+struct node
+{
+    string suit;
+    string value;
+    node*next;
+    int cardNum;
+};
+
+bool isEmpty(node *head){
+    if (head==NULL){
+        return true;
+    }
+    else
+        return false;
+}
+
+node* createDeck(node *fullDeck){
+    node *last = NULL;
+    int cardNum = 1;
+    for (int j=0; j<4; j++){
+        for (int i=1; i<=13; i++){
+            if (isEmpty(fullDeck)){
+                node *temp = new node;
+                if (j==0){
+                    temp -> suit = "Heart";
+                }
+                else if (j==1){
+                    temp -> suit = "Dimonds";
+                }
+                else if (j==2){
+                    temp -> suit = "Spades";
+                }
+                else if (j==3){
+                    temp -> suit = "Clubs";
+                }
+                if (i ==1){
+                    temp -> value = "Ace";
+                }
+                else if (i==11){
+                    temp -> value = "Jack";
+                }
+                else if (i==12){
+                    temp -> value = "Queen";
+                }
+                else if (i==13){
+                    temp -> value = "King";
+                }
+                else {
+                    //cout<<i;
+                    temp-> value = to_string(i);
+                }
+                temp->cardNum = cardNum;
+                cardNum++;
+                temp -> next = NULL;
+                fullDeck = temp;
+                last = temp;
+            }
+            else {
+                
+                node *fullDeck = new node;
+                if (j==0){
+                    fullDeck -> suit = "Heart";
+                }
+                else if (j==1){
+                    fullDeck -> suit = "Dimonds";
+                }
+                else if (j==2){
+                    fullDeck -> suit = "Spades";
+                }
+                else if (j==3){
+                    fullDeck -> suit = "Clubs";
+                }
+                if (i ==1){
+                    fullDeck -> value = "Ace";
+                }
+                else if (i==11){
+                    fullDeck -> value = "Jack";
+                }
+                else if (i==12){
+                    fullDeck -> value = "Queen";
+                }
+                else if (i==13){
+                    fullDeck -> value = "King";
+                }
+                else {
+                    //cout<<i;
+                    fullDeck-> value = to_string(i);
+                }
+                fullDeck->cardNum = cardNum;
+                cardNum++;
+                fullDeck -> next = NULL;
+                last ->next = fullDeck;
+                last = fullDeck;
+            }
+        }
+    }
+    return fullDeck;
+}
+void showList(node *fullDeck){//displays the linked list with the proper formating
+    while (fullDeck){
+        cout<<fullDeck->value<<" of "<<fullDeck->suit<<" card num: "<<fullDeck->cardNum<<"\n";
+        fullDeck = fullDeck->next;
+    }
+    
+}
+
+int main(int argc, const char * argv[]) {
+    node *fullDeck = NULL;
+   
+ fullDeck = createDeck(fullDeck);
+   
+    int num[52];
+    for (int k=1; k<53;k++){
+        num[k]=k;
+    }
+   random_shuffle(&num[0], &num[51]);
+   for (int k=1; k<53; k++){
+        cout<<num[k]<<"\n";
+    }
+    showList(fullDeck);
+    
+    cout<<"\n\n\nShuffled: \n";
+    node *hand1=NULL;
+    node *begining = fullDeck;
+
+    for (int i=1; i<16; i++){
+       // hand1=fullDeck;
+    while (fullDeck){
+        if (num[i]==fullDeck->cardNum){
+            node *hand1 = new node;
+            *hand1=*fullDeck;
+            cout<<hand1->value<<" of "<< hand1->suit<<"\n";
+
+        }
+        fullDeck=fullDeck->next;
+    }
+        fullDeck=begining; //resets the fulldeck from the begining
+    }
+    showList(hand1);
+    return 0;
+}
