@@ -30,7 +30,7 @@ node* createDeck(node *fullDeck){
                     temp -> suit = "Heart";
                 }
                 else if (j==1){
-                    temp -> suit = "Dimonds";
+                    temp -> suit = "Diamonds";
                 }
                 else if (j==2){
                     temp -> suit = "Spades";
@@ -67,7 +67,7 @@ node* createDeck(node *fullDeck){
                     fullDeck -> suit = "Heart";
                 }
                 else if (j==1){
-                    fullDeck -> suit = "Dimonds";
+                    fullDeck -> suit = "Diamonds";
                 }
                 else if (j==2){
                     fullDeck -> suit = "Spades";
