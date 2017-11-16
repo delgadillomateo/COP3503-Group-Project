@@ -1,0 +1,84 @@
+#include <iostream>
+
+/* this finds the loser of the round
+ *
+ * should be handed: an array of the 4 cards played that round in the order they were played in. and what # player went first in that round
+ * returns: whether it was the 1st,2nd,3rd,or 4th player to put a card down who lost. and exact player if handed number of player who started the round
+ */
+
+
+
+int* findBounds(int card){//determines what suit counts for that round
+    std::cout << "first card played: " << card << "\n";
+    int* bounds = new int[2];
+    if (card < 14){
+        bounds[0] = 1;
+        bounds[1] = 13;
+    }
+    else if (card < 27){
+        bounds[0] = 14;
+        bounds[1] = 26;
+    }
+    else if (card < 40){
+        bounds[0] = 27;
+        bounds[1] = 39;
+    }
+    else if (card < 53){ //i don't think the 'if' is necessary here but i kept it for "safety check"?
+        bounds[0] = 40;
+        bounds[1] = 52;
+    }
+    return bounds;
+}
+
+int findLoser(int* cardsPlayed){//if you consider the player who goes first as #1, second as #2, etc.
+    int* bounds = findBounds(cardsPlayed[0]);
+    std::cout << "bounds: " << bounds[0] << ", " << bounds[1] << "\n";
+
+    int losingPlayer = 0;
+    int highest = cardsPlayed[losingPlayer];
+
+    for (int i = 1; i < 4; i++) {
+        if (cardsPlayed[i] >= bounds[0] && cardsPlayed[i] <= bounds[1]) {//makes sure potential higher card is of the same suit
+            if (cardsPlayed[i] > highest) { //if aces r considered higher than kings, add || ==1
+                losingPlayer = i;
+                highest = cardsPlayed[losingPlayer];
+            }
+        }
+    }
+    std::cout << "highest card of the appropriate suit: " << highest << "\nso loser is " << losingPlayer << "\n";
+    return losingPlayer;
+}
+
+int findTrueLoser(int roundStarter, int losingPlayer){//based on who started the round
+    int loser = 0;
+    loser = losingPlayer - 1 + roundStarter;
+    if (loser > 4){
+        loser = loser%4;
+    }
+    std::cout << "true loser is " << loser << "\n";
+    return loser;
+}
+
+int main() {
+
+    //card they choose to play is saved into cardsPlayed
+    int* cardsPlayed = new int[4];
+    cardsPlayed[0] = 2;
+    cardsPlayed[1] = 20;
+    cardsPlayed[2] = 39;
+    cardsPlayed[3] = 10;
+
+    //who started the round
+    int roundStarter = 3;
+
+//^these r examples of what to pass to the method
+
+
+
+
+
+    int losingPlayer = findLoser(cardsPlayed);
+    int actuallyLosingPlayer = findTrueLoser(roundStarter, losingPlayer);
+
+    return 0;
+}
