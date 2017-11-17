@@ -1,0 +1,279 @@
+#include <iostream>
+#include <tuple>
+//#include "header.h"
+
+using namespace std;
+
+struct node
+{
+    string suit;
+    string value;
+    node*next;
+    int cardNum;
+};
+
+bool isEmpty(node *head){
+    if (head==NULL){
+        return true;
+    }
+    else
+        return false;
+}
+
+node* createDeck(node *fullDeck){//creates a full deck of cards, giving it a value, suit, and card number
+    node *last = NULL;
+    int cardNum = 1;
+    for (int j=0; j<4; j++){
+        for (int i=1; i<=13; i++){
+            if (isEmpty(fullDeck)){
+                node *temp = new node;
+                if (j==0){
+                    temp -> suit = "Heart";
+                }
+                else if (j==1){
+                    temp -> suit = "Diamonds";
+                }
+                else if (j==2){
+                    temp -> suit = "Spades";
+                }
+                else if (j==3){
+                    temp -> suit = "Clubs";
+                }
+                if (i ==1){
+                    temp -> value = "Ace";
+                }
+                else if (i==11){
+                    temp -> value = "Jack";
+                }
+                else if (i==12){
+                    temp -> value = "Queen";
+                }
+                else if (i==13){
+                    temp -> value = "King";
+                }
+                else {
+                    //cout<<i;
+                    temp-> value = to_string(i);
+                }
+                temp->cardNum = cardNum;
+                cardNum++;
+                temp -> next = NULL;
+                fullDeck = temp;
+                last = temp;
+            }
+            else {
+                
+                node *fullDeck = new node;
+                if (j==0){
+                    fullDeck -> suit = "Heart";
+                }
+                else if (j==1){
+                    fullDeck -> suit = "Diamonds";
+                }
+                else if (j==2){
+                    fullDeck -> suit = "Spades";
+                }
+                else if (j==3){
+                    fullDeck -> suit = "Clubs";
+                }
+                if (i ==1){
+                    fullDeck -> value = "Ace";
+                }
+                else if (i==11){
+                    fullDeck -> value = "Jack";
+                }
+                else if (i==12){
+                    fullDeck -> value = "Queen";
+                }
+                else if (i==13){
+                    fullDeck -> value = "King";
+                }
+                else {
+                    //cout<<i;
+                    fullDeck-> value = to_string(i);
+                }
+                fullDeck->cardNum = cardNum;
+                cardNum++;
+                fullDeck -> next = NULL;
+                last ->next = fullDeck;
+                last = fullDeck;
+            }
+        }
+    }
+    return fullDeck;
+}
+void showHand(node *fullDeck){//displays the linked list with the proper formating
+    while (fullDeck){
+        if (fullDeck->cardNum !=0){
+        cout<<fullDeck->value<<" of "<<fullDeck->suit<<" card num: "<<fullDeck->cardNum<<"\n";
+        }
+        fullDeck = fullDeck->next;
+    }
+    
+}
+
+node* createHand(node *fullDeck, int num[52], int rangeMin, int rangeMax){ //creates each hand of 13 cards
+    node *last = NULL;
+    node *hand=NULL;
+    node *begining = fullDeck;
+
+    for (int i=rangeMin; i<rangeMax; i++){ //puts the first 16 cards in the random array into the first hand
+        while (fullDeck){
+            if (num[i]==fullDeck->cardNum){
+                if (isEmpty(hand)){
+                    node *temp = new node;
+                    temp->value=fullDeck->value;
+                    temp->suit=fullDeck->suit;
+                    temp->cardNum=fullDeck->cardNum;
+                    temp -> next = NULL;
+                    hand = temp;
+                    last = temp;
+                }
+                else {
+                    node *hand = new node;
+                    hand->value=fullDeck->value;
+                    hand->suit=fullDeck->suit;
+                    hand->cardNum=fullDeck->cardNum;
+                    hand -> next = NULL;
+                    last ->next = hand;
+                    last = hand;
+                }
+            }
+            fullDeck=fullDeck->next;
+        }
+        fullDeck=begining; //resets the fulldeck from the begining
+    }
+    return hand;
+}
+tuple <node*, node*> switchCards (node* hand){//the users select which cards they want to have removed
+    node* start = hand;
+    node *last = NULL;
+    node *tempCards = NULL;
+    
+    int card1 =0;
+    int card2 =0;
+    int card3 =0;
+    int card4 =0;
+    cout<<"Pick the card you will give you the player to your right? Enter the card number followed by 'enter' for each card\n";
+    cin>> card1; //need to make it so that if they want to remove a card they do not have, there is an error!!!!!!!!!!!!!!!!!!!!!!!!
+    cin>>card2;
+    cin>>card3;
+    cin>>card4;
+    for (int i = 0; i<3; i++){ //looks for each 4 card
+    while (hand){
+        if (hand->cardNum==card1 || hand->cardNum==card2 ||hand->cardNum==card3 || hand->cardNum==card4){ //if the card they want to switch is in the hand, it adds the card to a list of temp cards that will be moved to the other player's hand
+            if (isEmpty(tempCards)){
+                node *temp = new node;
+                temp->value=hand->value;
+                temp->suit=hand->suit;
+                temp->cardNum=hand->cardNum;
+                temp -> next = NULL;
+                tempCards = temp;
+                last = temp;
+            }
+            else {
+                node *tempCards = new node;
+                tempCards->value=hand->value;
+                tempCards->suit=hand->suit;
+                tempCards->cardNum=hand->cardNum;
+                tempCards -> next = NULL;
+                last ->next = tempCards;
+                last = tempCards;
+            }
+            
+            hand->cardNum=0; //once the card has been removed, the card number goes to 0. In the showHand method, it doesnt print out the card when the num is 0
+            hand->suit="";
+            hand->value="";
+        }
+        hand = hand->next;
+        }
+        hand = start; //starts hand back at the begining
+    }
+    return make_tuple (tempCards, hand);
+}
+
+node* addCardsBack (node* hand, node* changedCards){ //adds cards that players decided to swap to the next player's hand
+    node* start = hand;
+    while (hand){
+        if (hand->cardNum==0){
+            hand->suit=changedCards->suit;
+            hand->value=changedCards->value;
+            hand->cardNum=changedCards->cardNum;
+            changedCards = changedCards->next;
+        }
+        hand = hand->next;
+    }
+    hand=start;
+    return hand;
+}
+
+
+int main(int argc, const char * argv[]) {
+    string respond = "";
+    node *fullDeck = NULL;
+    node *hand1 = NULL;
+    node *hand2 = NULL;
+    node *hand3 = NULL;
+    node *hand4 = NULL;
+   
+ fullDeck = createDeck(fullDeck);
+   
+    int num[52];
+    for (int k=1; k<53;k++){
+        num[k]=k;
+    }
+   random_shuffle(&num[0], &num[51]); //creates a list of numbers 1-52 in a random order THIS DOESNT REALLY WORK!
+   for (int k=1; k<53; k++){
+        //cout<<num[k]<<"\n";
+    }
+    
+    cout<<"\n\n\nShuffled: \n";
+    hand1=createHand(fullDeck, num, 0, 14); //creates each hand
+    hand2 = createHand(fullDeck, num, 14, 27);
+    hand3 = createHand(fullDeck, num, 27, 40);
+    hand4 = createHand(fullDeck, num, 40, 53);
+    cout<<"hand 1: \n";
+        showHand(hand1);
+            node* cardsfromPlay1 = NULL; //this is the temparary spot that the cards that player 1 will get rid of
+            tie (cardsfromPlay1, hand1) = switchCards (hand1);
+            cout<<"These are the cards you are removing: \n";
+            showHand(cardsfromPlay1);
+    cout<<"\nress any key to show hand"; //NEED BETTER WAY TO CLEAR COLSOL!
+        cin>>respond;
+    
+    cout<<"\nhand 2: \n";
+        showHand(hand2);
+            node* cardsfromPlay2 = NULL; //this is the temparary spot that the cards that player 2 will get rid of
+            tie (cardsfromPlay2, hand2) = switchCards (hand2);
+            cout<<"These are the cards you are removing: \n";
+            showHand(cardsfromPlay2);
+    cout<<"\nPress any key to show hand";
+    cin>>respond;
+    
+    cout<<"\nhand 3: \n";
+       showHand(hand3);
+            node* cardsfromPlay3 = NULL; //this is the temparary spot that the cards that player 3 will get rid of
+            tie (cardsfromPlay3, hand3) = switchCards (hand3);
+            cout<<"These are the cards you are removing: \n";
+            showHand(cardsfromPlay3);
+    cout<<"\nPress any key to show hand";
+    cin>>respond;
+    
+    cout<<"\nhand 4: \n";
+       showHand(hand4);
+            node* cardsfromPlay4 = NULL; //this is the temparary spot that the cards that player 4 will get rid of
+            tie (cardsfromPlay4, hand4) = switchCards (hand4);
+            cout<<"These are the cards you are removing: \n";
+            showHand(cardsfromPlay4);
+    cout<<"Press any key to show hand";
+    cin>>respond;
+
+    addCardsBack(hand1, cardsfromPlay2); //adds the cards that player two discarded to player 1's hand
+    addCardsBack(hand2, cardsfromPlay3);
+    addCardsBack(hand3, cardsfromPlay4);
+    addCardsBack(hand4, cardsfromPlay1);
+    
+    //the set up of cards that happends at the begining of a game is now done!!!!
+    //NOW, all of the hands (hand1, hand2, hand3, and hand4) all have the new set of cards that have been swapped around...Next step is to start a loop that actually runs the game!
+    return 0;
+}
