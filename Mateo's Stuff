@@ -1,0 +1,95 @@
+//
+//  Hearts.cpp
+//  Hearts
+//
+//  Created by Mateo Delgadillo on 11/28/17.
+//  Copyright © 2017 Mateo Delgadillo. All rights reserved.
+//
+
+#include "Hearts.hpp"
+#include <string.h>;
+using namespace std;
+
+
+//takes in cardNum and the hand and returns (error). If true it means it's not gonna work. False is what we want.
+bool validateCardNum (string suit, node *hand){
+    int lowerBound, upperBound;
+    if (suit == "hearts") {
+        lowerBound = 1;
+        upperBound = 13;
+    }
+    if (suit == "diamonds") {
+        lowerBound = 14;
+        upperBound = 27;
+    }
+    if (suit == "spades") {
+        lowerBound = 28;
+        upperBound = 40;
+    }
+    if (suit == "clubs") {
+        lowerBound = 40;
+        upperBound = 52;
+    }
+    bool error = true;
+    while (hand){
+        if (hand->cardNum == cardNum){
+            error = false;
+        }
+        hand = hand ->next;
+    }
+    if (error == true){
+        cout<<"That card is not in your hand. Please enter a new card number\n";
+    }
+    return error;
+}
+
+int main(int argc, const char * argv[]) {
+
+    for (int round = 0; round < 14; round++) { //goes through every round
+        //player 1 starts first round
+        int firstCardPlayed, secondCard, thirdCard, fourthCard;
+        int* bounds = new int[2];
+        string suit = "";
+        
+        player1.checkCardNum() = firstCardPlayed; // cardnum must be equal to 41
+        if (firstCardPlayed > 0 && firstCardPlayed < 14){
+            suit = "hearts";
+            return suit;
+        }
+        else if (firstCardPlayed > 13 && firstCardPlayed < 27){
+            suit = "diamonds";
+            return suit;
+        }
+        else if (firstCardPlayed > 26 && firstCardPlayed < 40){
+            suit = "spades";
+            return suit;
+        }
+        else if (firstCardPlayed > 39 && firstCardPlayed < 53){
+            suit = "clubs";
+            return suit;
+        }
+        
+        
+        
+        player2.checkCardNum() = secondCard;
+        if (cardInBounds(secondCard)) {
+            //choose card to play
+        } else if (!cardInBounds(secondCard) && justinCode(secondCard, hand)){
+            //
+        }
+        player3.checkCardNum() = thirdCard;
+        
+        player4.checkCardNum() = fourthCard;
+        
+        
+        //for player 2
+        if (cardNum < 14 && cardNum > 0) {
+            
+        }
+
+}
+
+
+    bool cardInBounds (int card) {
+        
+    }
